@@ -1,0 +1,52 @@
+global:
+  scrape_interval: 20s # default 1 minute
+  scrape_timeout: 10s
+
+alerting: #config alert with alertmanager => với hostname là: alertmanager:9093 (not localhost:9093)
+  alertmanagers:
+  - static_configs:
+    - targets:
+      - alertmanager:9093
+
+rule_files:
+  - rules/*.rule.yml
+
+scrape_configs:
+
+  - job_name: prometheus
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  - job_name: workshop_node # whitebox monitoring
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: [
+        # '<ip_address>:8080' #config whitebox
+        # '43.239.220.96:8080'
+        '207.148.100.58:9100'
+      ]
+
+  - job_name: 'blackbox' # blackbox monitoring
+    metrics_path: /probe
+    scrape_interval: 1m
+    params:
+      module: [http_2xx]
+    static_configs:
+      - targets:
+        # - https://techtalk.vn #config blackbox
+        - https://khotemplate.vn
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: blackbox:9115
+  #create mongodb
+  - job_name: mongodb
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: [
+        '207.148.100.58:9216'
+      ]

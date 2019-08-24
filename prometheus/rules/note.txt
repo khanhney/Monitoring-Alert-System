@@ -1,0 +1,18 @@
+1. backbox
+2. cpu
+3. memnory
+4. network
+5. storage
+6. systemd
+7.tcp
+8.instances: nếu node down => báos
+
+nếu alert manager tham chiếu đến server đang bảo trì, nhưng nó vẫn spam (gửi alert trong lúc bảo trì`)
+=> giải pháp: disable, tạo silences
+----
+nếu ko cài exporter trên VPS => phải dùng blackbox để check TCP, UDP, Port, ...
+----
+prometheus SERVER: truy cập dữ liệu qua http, với exporter config
+- backup dữ liệu của prometheus, nó sẽ xuất ra file, backup file, folder
+----
+add datasource: database-> query demo: tối ưu hoá câu lệnh truy vấn
